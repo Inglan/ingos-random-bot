@@ -7,8 +7,11 @@ const app = new App({
   appToken: process.env.SLACK_APP_TOKEN,
 });
 
-app.message("test", async ({ message, say }) => {
-  await say(`it works`);
+app.event("member_joined_channel", async ({ event }) => {
+  await app.client.chat.postMessage({
+    channel: event.channel,
+    text: `Welcome to the channel, <@${event.user}>!`,
+  });
 });
 
 (async () => {
