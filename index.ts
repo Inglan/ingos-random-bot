@@ -1,4 +1,4 @@
-import { App } from "@slack/bolt";
+import { App, subtype } from "@slack/bolt";
 import { CHANNEL_ID } from "./constants";
 
 // Initializes your app with your Slack app and bot token
@@ -92,6 +92,32 @@ app.action("ultrafastparrot", async ({ body, context, ack }) => {
       },
     ],
   });
+});
+
+app.event("message", async ({ event, say }) => {
+  if (
+    event.subtype === undefined &&
+    event.channel_type == "channel" &&
+    event.text
+  ) {
+    const links = [];
+
+    const textBlocks = event.blocks?.filter(
+      (block) => block.type === "rich_text",
+    );
+
+    textBlocks?.forEach((block) => {
+      block.elements?.forEach((element) => {
+        element.elements?.forEach((innerElement) => {
+          if (innerElement.type === "link") {
+            links.push(innerElement);
+          }
+        });
+      });
+    });
+
+    console.log(links);
+  }
 });
 
 (async () => {
