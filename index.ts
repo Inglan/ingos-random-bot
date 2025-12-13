@@ -64,6 +64,14 @@ app.event("member_joined_channel", async ({ event }) => {
   });
 });
 
+app.action("ultrafastparrot", async ({ body, ack }) => {
+  await ack();
+  await app.client.chat.postMessage({
+    channel: body.channel?.id!,
+    text: ":conga_parrot:".repeat(15),
+  });
+});
+
 (async () => {
   // Start your app
   await app.start();
