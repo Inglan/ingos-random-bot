@@ -1,6 +1,24 @@
 import { App, subtype } from "@slack/bolt";
 import { CHANNEL_ID } from "./constants";
 
+type RichTextSectionElement =
+  | { type: "text"; text: string }
+  | { type: "link"; url: string; text?: string }
+  | { type: "user"; user_id: string }
+  | { type: "emoji"; name: string }
+  | { type: "channel"; channel_id: string };
+
+type RichTextBlockElement =
+  | {
+      type: "rich_text_section";
+      elements: RichTextSectionElement[];
+    }
+  | {
+      type: "rich_text_list";
+      style: "bullet" | "ordered";
+      elements: { type: "rich_text_section"; elements: RichTextSectionElement[] }[];
+    };
+
 // Initializes your app with your Slack app and bot token
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -108,11 +126,25 @@ app.event("message", async ({ event, say }) => {
 
     textBlocks?.forEach((block) => {
       if ("elements" in block && Array.isArray(block.elements)) {
-        block.elements.forEach((element: any) => {
-          if (element.elements && Array.isArray(element.elements)) {
-            element.elements.forEach((innerElement: any) => {
-              if (innerElement.type === "link") {
-                links.push(innerElement);
+        block.elements.forEach((element) => {
+          if (
+            "elements" in element &&
+            Array.isArray(element.elements) &&
+            typeof element === "object"
+          ) {
+            element.elements.forEach((innerElement) => {
+              if (
+                typeof innerElement === "object" &&
+                innerElement !== null &&
+                "type" in innerElement &&
+                innerElement.type === "link" &&
+                "url" in innerElement
+              ) {
+                links.push({
+                  type: "link",
+                  url: String(innerElement.url),
+                  text: "text" in innerElement ? String(innerElement.text) : undefined,
+                });
               }
             });
           }
@@ -150,7 +182,7 @@ app.event("message", async ({ event, say }) => {
     });
 
     if (complaintListItems.length != 0) {
-      const richTextElements = [
+      const richTextElements: RichTextBlockElement[] = [
         {
           type: "rich_text_section",
           elements: [
