@@ -64,11 +64,31 @@ app.event("member_joined_channel", async ({ event }) => {
   });
 });
 
-app.action("ultrafastparrot", async ({ body, ack }) => {
+app.action("ultrafastparrot", async ({ body, context, ack }) => {
+  console.log(context.userId);
   await ack();
   await app.client.chat.postMessage({
     channel: body.channel?.id!,
-    text: ":conga_parrot:".repeat(15),
+    blocks: [
+      {
+        type: "rich_text",
+        elements: [
+          {
+            type: "rich_text_section",
+            elements: [
+              ...Array(15).fill({ type: "emoji", name: "ultrafastparrot" }),
+            ],
+          },
+          {
+            type: "rich_text_section",
+            elements: [
+              { type: "text", text: "Sent by " },
+              { type: "user", user_id: context.userId },
+            ],
+          },
+        ],
+      },
+    ],
   });
 });
 
