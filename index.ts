@@ -1,23 +1,6 @@
 import { App, subtype } from "@slack/bolt";
+import type { RichTextBlockElement, RichTextElement } from "@slack/types";
 import { CHANNEL_ID } from "./constants";
-
-type RichTextSectionElement =
-  | { type: "text"; text: string }
-  | { type: "link"; url: string; text?: string }
-  | { type: "user"; user_id: string }
-  | { type: "emoji"; name: string }
-  | { type: "channel"; channel_id: string };
-
-type RichTextBlockElement =
-  | {
-      type: "rich_text_section";
-      elements: RichTextSectionElement[];
-    }
-  | {
-      type: "rich_text_list";
-      style: "bullet" | "ordered";
-      elements: { type: "rich_text_section"; elements: RichTextSectionElement[] }[];
-    };
 
 // Initializes your app with your Slack app and bot token
 const app = new App({
@@ -121,7 +104,7 @@ app.event("message", async ({ event, say }) => {
     const links: Array<{ type: "link"; url: string; text?: string }> = [];
 
     const textBlocks = event.blocks?.filter(
-      (block) => block.type === "rich_text",
+      (block) => block.type === "rich_text"
     );
 
     textBlocks?.forEach((block) => {
@@ -143,7 +126,10 @@ app.event("message", async ({ event, say }) => {
                 links.push({
                   type: "link",
                   url: String(innerElement.url),
-                  text: "text" in innerElement ? String(innerElement.text) : undefined,
+                  text:
+                    "text" in innerElement
+                      ? String(innerElement.text)
+                      : undefined,
                 });
               }
             });
@@ -163,13 +149,13 @@ app.event("message", async ({ event, say }) => {
 
       if (params.get("si")) {
         complaints.push(
-          "Has an si parameter that can be used to track who sent the link, and associate you with anyone who clicks it",
+          "Has an si parameter that can be used to track who sent the link, and associate you with anyone who clicks it"
         );
       }
 
       if (hostname == "amzn.asia") {
         complaints.push(
-          "This is a short amazon link that can be used to track who sent the link, and associate you with anyone who clicks it",
+          "This is a short amazon link that can be used to track who sent the link, and associate you with anyone who clicks it"
         );
       }
 
