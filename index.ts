@@ -100,23 +100,27 @@ app.event("message", async ({ event, say }) => {
     event.channel_type == "channel" &&
     event.text
   ) {
-    const links = [];
+    const links: Array<{ type: "link"; url: string; text?: string }> = [];
 
     const textBlocks = event.blocks?.filter(
       (block) => block.type === "rich_text",
     );
 
     textBlocks?.forEach((block) => {
-      block.elements?.forEach((element) => {
-        element.elements?.forEach((innerElement) => {
-          if (innerElement.type === "link") {
-            links.push(innerElement);
+      if ("elements" in block && Array.isArray(block.elements)) {
+        block.elements.forEach((element: any) => {
+          if (element.elements && Array.isArray(element.elements)) {
+            element.elements.forEach((innerElement: any) => {
+              if (innerElement.type === "link") {
+                links.push(innerElement);
+              }
+            });
           }
         });
-      });
+      }
     });
 
-    console.log(links);
+    console.log("Found links:", links);
   }
 });
 
