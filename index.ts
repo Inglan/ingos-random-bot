@@ -120,7 +120,80 @@ app.event("message", async ({ event, say }) => {
       }
     });
 
-    console.log("Found links:", links);
+    const complaintListItems: { title: string; items: string[] }[] = [];
+
+    links.forEach((link) => {
+      const linkObj = new URL(link.url);
+      const hostname = linkObj.hostname;
+      const params = new URLSearchParams(linkObj.search);
+
+      const complaints = [];
+
+      if (params.get("si")) {
+        complaints.push(
+          "Has an si parameter that can be used to track who sent the link, and associate you with anyone who clicks it",
+        );
+      }
+
+      complaintListItems.push({
+        title: link.url,
+        items: complaints,
+      });
+    });
+
+    if (complaintListItems.length != 0) {
+      const richTextElements = [
+        {
+          type: "rich_text_section",
+          elements: [
+            {
+              type: "text",
+              text: "There are some issues with links in your message:\n\n",
+            },
+          ],
+        },
+      ];
+
+      complaintListItems.forEach((complaintItem) => {
+        // Add the link title
+        richTextElements.push({
+          type: "rich_text_section",
+          elements: [
+            {
+              type: "link",
+              url: complaintItem.title,
+              text: complaintItem.title,
+            },
+          ],
+        });
+
+        // Add the list of complaints
+        if (complaintItem.items.length > 0) {
+          richTextElements.push({
+            type: "rich_text_list",
+            style: "bullet",
+            elements: complaintItem.items.map((item) => ({
+              type: "rich_text_section",
+              elements: [
+                {
+                  type: "text",
+                  text: item,
+                },
+              ],
+            })),
+          });
+        }
+      });
+
+      await say({
+        blocks: [
+          {
+            type: "rich_text",
+            elements: richTextElements,
+          },
+        ],
+      });
+    }
   }
 });
 
