@@ -69,6 +69,7 @@ app.action("ultrafastparrot", async ({ body, context, ack }) => {
   await ack();
   await app.client.chat.postMessage({
     channel: body.channel?.id!,
+    text: ":ultrafastparrot:".repeat(20) + "\nSent by " + context.userId,
     blocks: [
       {
         type: "rich_text",
