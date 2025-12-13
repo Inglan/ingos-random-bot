@@ -55,10 +55,7 @@ async function fetchClearURLsRules(): Promise<ClearURLsData> {
   return await rulesFetchPromise;
 }
 
-function checkURLAgainstRules(
-  url: string,
-  rules: ClearURLsData
-): string[] {
+function checkURLAgainstRules(url: string, rules: ClearURLsData): string[] {
   const complaints: string[] = [];
   const urlObj = new URL(url);
   const fullURL = urlObj.href;
@@ -284,6 +281,18 @@ app.event("message", async ({ event, say }) => {
 
     links.forEach((link) => {
       const complaints = checkURLAgainstRules(link.url, rules);
+
+      // Check for amzn.asia short links
+      try {
+        const linkObj = new URL(link.url);
+        if (linkObj.hostname === "amzn.asia") {
+          complaints.push(
+            "This is a short Amazon link that can be used to track who sent the link, and associate you with anyone who clicks it"
+          );
+        }
+      } catch {
+        // Invalid URL, skip
+      }
 
       if (complaints.length != 0) {
         complaintListItems.push({
