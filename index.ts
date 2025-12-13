@@ -135,6 +135,12 @@ app.event("message", async ({ event, say }) => {
         );
       }
 
+      if (hostname == "amzn.asia") {
+        complaints.push(
+          "This is a short amazon link that can be used to track who sent the link, and associate you with anyone who clicks it",
+        );
+      }
+
       if (complaints.length != 0) {
         complaintListItems.push({
           title: link.url,
