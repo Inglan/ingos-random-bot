@@ -7,14 +7,13 @@ const app = new App({
   appToken: process.env.SLACK_APP_TOKEN,
 });
 
+app.message("test", async ({ message, say }) => {
+  await say(`it works`);
+});
+
 (async () => {
   // Start your app
   await app.start();
-
-  await app.client.chat.postMessage({
-    channel: "C0A0QNJNDGQ",
-    text: "testing",
-  });
 
   app.logger.info("⚡️ Bolt app is running!");
 })();
