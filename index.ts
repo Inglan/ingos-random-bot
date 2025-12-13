@@ -1,10 +1,7 @@
 import { App, subtype } from "@slack/bolt";
 import type { RichTextBlockElement, RichTextElement } from "@slack/types";
 import { CHANNEL_ID } from "./constants";
-import {
-  fetchClearURLsRules,
-  checkURLAgainstRules,
-} from "./clearurls";
+import { fetchClearURLsRules, checkURLAgainstRules } from "./clearurls";
 
 // Initializes your app with your Slack app and bot token
 const app = new App({
