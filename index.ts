@@ -75,7 +75,7 @@ app.action("ultrafastparrot", async ({ body, context, ack }) => {
         elements: [
           {
             type: "rich_text_section",
-            elements: Array(15).fill({ type: "emoji", name: "conga_parrot" }),
+            elements: Array(20).fill({ type: "emoji", name: "conga_parrot" }),
           },
           {
             type: "rich_text_section",
