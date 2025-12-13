@@ -135,10 +135,12 @@ app.event("message", async ({ event, say }) => {
         );
       }
 
-      complaintListItems.push({
-        title: link.url,
-        items: complaints,
-      });
+      if (complaints.length != 0) {
+        complaintListItems.push({
+          title: link.url,
+          items: complaints,
+        });
+      }
     });
 
     if (complaintListItems.length != 0) {
