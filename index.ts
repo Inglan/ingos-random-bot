@@ -10,7 +10,49 @@ const app = new App({
 app.event("member_joined_channel", async ({ event }) => {
   await app.client.chat.postMessage({
     channel: event.channel,
-    text: `Welcome to Ingo's channel <@${event.user}>! :ultrafastparrot: This is where I post daily updates, and random stuff, as you may have guess from the name :) Also if you want to see me crashing out, you can also join `,
+    blocks: [
+      {
+        type: "rich_text",
+        elements: [
+          {
+            type: "rich_text_section",
+            elements: [
+              {
+                type: "text",
+                text: `Welcome to Ingo's channel <@${event.user}>!`,
+              },
+              {
+                type: "emoji",
+                name: "ultrafastparrot",
+              },
+              {
+                type: "text",
+                text: "\n\nThis is where I post daily updates, and random stuff, as you may have guess from the name :) Also if you want to see me crashing out, you can also join ",
+              },
+              {
+                type: "channel",
+                channel_id: "C09PB8F6Z9U",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "actions",
+        elements: [
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: ":ultrafastparrot:",
+              emoji: true,
+            },
+            value: "ultrafastparrot",
+            action_id: "ultrafastparrot",
+          },
+        ],
+      },
+    ],
   });
 });
 
