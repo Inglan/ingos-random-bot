@@ -11,5 +11,10 @@ const app = new App({
   // Start your app
   await app.start();
 
+  await app.client.chat.postMessage({
+    channel: "C0A0QNJNDGQ",
+    text: "testing",
+  });
+
   app.logger.info("⚡️ Bolt app is running!");
 })();
