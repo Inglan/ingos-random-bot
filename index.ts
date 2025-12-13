@@ -19,7 +19,15 @@ app.event("member_joined_channel", async ({ event }) => {
             elements: [
               {
                 type: "text",
-                text: `Welcome to Ingo's channel <@${event.user}>!`,
+                text: "Welcome to Ingo's channel ",
+              },
+              {
+                type: "user",
+                user_id: event.user,
+              },
+              {
+                type: "text",
+                text: "! ",
               },
               {
                 type: "emoji",
