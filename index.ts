@@ -1,4 +1,5 @@
 import { App } from "@slack/bolt";
+import { CHANNEL_ID } from "./constants";
 
 // Initializes your app with your Slack app and bot token
 const app = new App({
@@ -8,6 +9,8 @@ const app = new App({
 });
 
 app.event("member_joined_channel", async ({ event }) => {
+  if (event.channel != CHANNEL_ID) return;
+
   await app.client.chat.postMessage({
     channel: event.channel,
     blocks: [
@@ -66,6 +69,7 @@ app.event("member_joined_channel", async ({ event }) => {
 
 app.action("ultrafastparrot", async ({ body, context, ack }) => {
   await ack();
+
   await app.client.chat.postMessage({
     channel: body.channel?.id!,
     text: ":ultrafastparrot:".repeat(20) + "\nSent by " + context.userId,
