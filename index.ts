@@ -65,7 +65,6 @@ app.event("member_joined_channel", async ({ event }) => {
 });
 
 app.action("ultrafastparrot", async ({ body, context, ack }) => {
-  console.log(context.userId);
   await ack();
   await app.client.chat.postMessage({
     channel: body.channel?.id!,
