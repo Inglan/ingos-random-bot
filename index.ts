@@ -221,6 +221,7 @@ app.event("message", async ({ event, say }) => {
             elements: richTextElements,
           },
         ],
+        text: "There are some issues with links in your message:",
       });
     }
   }
