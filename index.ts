@@ -187,9 +187,11 @@ app.event("message", async ({ event, say }) => {
           type: "rich_text_section",
           elements: [
             {
-              type: "link",
-              url: complaintItem.title,
+              type: "text",
               text: complaintItem.title,
+              style: {
+                code: true,
+              },
             },
           ],
         });
