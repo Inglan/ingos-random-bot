@@ -6,8 +6,9 @@ import { fetchClearURLsRules, checkURLAgainstRules } from "./clearurls";
 // Initializes your app with your Slack app and bot token
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  socketMode: true,
+  socketMode: process.env.SLACK_SOCKET_MODE === "true",
   appToken: process.env.SLACK_APP_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
 app.event("member_joined_channel", async ({ event }) => {
@@ -105,7 +106,7 @@ app.event("message", async ({ event, say }) => {
     const links: Array<{ type: "link"; url: string; text?: string }> = [];
 
     const textBlocks = event.blocks?.filter(
-      (block) => block.type === "rich_text"
+      (block) => block.type === "rich_text",
     );
 
     textBlocks?.forEach((block) => {
@@ -152,7 +153,7 @@ app.event("message", async ({ event, say }) => {
         const linkObj = new URL(link.url);
         if (linkObj.hostname === "amzn.asia") {
           complaints.push(
-            "This is a short Amazon link that can be used to track who sent the link, and associate you with anyone who clicks it"
+            "This is a short Amazon link that can be used to track who sent the link, and associate you with anyone who clicks it",
           );
         }
       } catch {
