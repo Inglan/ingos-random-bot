@@ -70,12 +70,11 @@ app.event("member_joined_channel", async ({ event }) => {
   });
 });
 
-app.action("ultrafastparrot", async ({ body, context, ack }) => {
+app.action("ultrafastparrot", async ({ body, context, ack, respond }) => {
   await ack();
 
-  await app.client.chat.postMessage({
-    channel: body.channel?.id!,
-    text: ":ultrafastparrot:".repeat(20) + "\nSent by " + context.userId,
+  await respond({
+    text: ":ultrafastparrot:".repeat(20) + `\nSent by <@${context.userId}>`,
     blocks: [
       {
         type: "rich_text",
