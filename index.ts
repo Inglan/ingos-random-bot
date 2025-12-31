@@ -108,6 +108,28 @@ app.event("member_joined_channel", async ({ event, say }) => {
   });
 });
 
+app.action(
+  "remove_from_ping_group",
+  async ({ body, context, ack, respond }) => {
+    await ack();
+
+    const existingMembers = await app.client.usergroups.users.list({
+      usergroup: GROUP_ID,
+    });
+
+    await app.client.usergroups.users.update({
+      usergroup: GROUP_ID,
+      users: (existingMembers.users || [])
+        .filter((id) => id !== body.user.id)
+        .join(","),
+    });
+
+    await respond({
+      text: "Ok, you've been removed from the ping group.",
+    });
+  },
+);
+
 app.action("ultrafastparrot", async ({ body, context, ack, respond }) => {
   await ack();
 
