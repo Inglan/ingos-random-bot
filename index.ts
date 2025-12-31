@@ -82,6 +82,7 @@ app.event("member_joined_channel", async ({ event, say }) => {
   await app.client.chat.postEphemeral({
     channel: event.channel,
     user: event.user,
+    text: "By the way, I added you to @ingos-random-group, so you get pung sometimes when I post something interesting.",
     blocks: [
       {
         type: "rich_text",
