@@ -84,6 +84,9 @@ app.action("ultrafastparrot", async ({ body, context, ack, respond }) => {
   await ack();
 
   await respond({
+    replace_original: false,
+    delete_original: false,
+    response_type: "in_channel",
     text: ":ultrafastparrot:".repeat(20) + `\nSent by <@${context.userId}>`,
     blocks: [
       {
