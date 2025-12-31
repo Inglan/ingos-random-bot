@@ -84,11 +84,37 @@ app.event("member_joined_channel", async ({ event, say }) => {
     user: event.user,
     blocks: [
       {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `By the way, I added you to <@${GROUP_ID}>, so you get ~pinged~ pung sometimes when I post something interesting.`,
-        },
+        type: "rich_text",
+        elements: [
+          {
+            type: "rich_text_section",
+            elements: [
+              {
+                type: "text",
+                text: "By the way, I added you to ",
+              },
+              {
+                type: "usergroup",
+                usergroup_id: GROUP_ID,
+              },
+              {
+                type: "text",
+                text: ", so you get ",
+              },
+              {
+                type: "text",
+                text: "pinged",
+                style: {
+                  strike: true,
+                },
+              },
+              {
+                type: "text",
+                text: " pung sometimes when I post something interesting.",
+              },
+            ],
+          },
+        ],
       },
       {
         type: "actions",
