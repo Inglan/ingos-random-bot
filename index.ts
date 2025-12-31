@@ -1,6 +1,6 @@
 import { App, subtype } from "@slack/bolt";
 import type { RichTextBlockElement, RichTextElement } from "@slack/types";
-import { CHANNEL_ID } from "./constants";
+import { CHANNEL_ID, GROUP_ID } from "./constants";
 import { fetchClearURLsRules, checkURLAgainstRules } from "./clearurls";
 
 // Initializes your app with your Slack app and bot token
@@ -13,6 +13,15 @@ const app = new App({
 
 app.event("member_joined_channel", async ({ event }) => {
   if (event.channel != CHANNEL_ID) return;
+
+  const existingMembers = await app.client.usergroups.users.list({
+    usergroup: GROUP_ID,
+  });
+
+  await app.client.usergroups.users.update({
+    usergroup: GROUP_ID,
+    users: [...(existingMembers.users || []), event.user].join(","),
+  });
 
   await app.client.chat.postMessage({
     channel: event.channel,
