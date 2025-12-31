@@ -11,7 +11,7 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-app.event("member_joined_channel", async ({ event }) => {
+app.event("member_joined_channel", async ({ event, say }) => {
   if (event.channel != CHANNEL_ID) return;
 
   const existingMembers = await app.client.usergroups.users.list({
@@ -73,6 +73,34 @@ app.event("member_joined_channel", async ({ event }) => {
             },
             value: "ultrafastparrot",
             action_id: "ultrafastparrot",
+          },
+        ],
+      },
+    ],
+  });
+
+  await app.client.chat.postEphemeral({
+    channel: event.channel,
+    user: event.user,
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `By the way, I added you to <@${GROUP_ID}>, so you get ~pinged~ pung sometimes when I post something interesting.`,
+        },
+      },
+      {
+        type: "actions",
+        elements: [
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: "Remove me",
+            },
+            value: "remove_from_ping_group",
+            action_id: "remove_from_ping_group",
           },
         ],
       },
