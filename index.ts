@@ -24,6 +24,7 @@ app.event("member_joined_channel", async ({ event }) => {
   });
 
   await app.client.chat.postMessage({
+    // TODO: Add text
     channel: event.channel,
     blocks: [
       {
