@@ -24,8 +24,8 @@ app.event("member_joined_channel", async ({ event }) => {
   });
 
   await app.client.chat.postMessage({
-    // TODO: Add text
     channel: event.channel,
+    text: `Welcome to Ingo's channel <@${event.user}>! This is where I post daily updates, and random stuff, as you may have guess from the name :) Also if you want to see me crashing out, you can also join #ingo-crashing-out`,
     blocks: [
       {
         type: "rich_text",
