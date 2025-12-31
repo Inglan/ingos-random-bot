@@ -14,15 +14,6 @@ const app = new App({
 app.event("member_joined_channel", async ({ event, say }) => {
   if (event.channel != CHANNEL_ID) return;
 
-  const existingMembers = await app.client.usergroups.users.list({
-    usergroup: GROUP_ID,
-  });
-
-  await app.client.usergroups.users.update({
-    usergroup: GROUP_ID,
-    users: [...(existingMembers.users || []), event.user].join(","),
-  });
-
   await app.client.chat.postMessage({
     channel: event.channel,
     text: `Welcome to Ingo's channel <@${event.user}>! This is where I post daily updates, and random stuff, as you may have guess from the name :) Also if you want to see me crashing out, you can also join #ingo-crashing-out`,
@@ -77,6 +68,15 @@ app.event("member_joined_channel", async ({ event, say }) => {
         ],
       },
     ],
+  });
+
+  const existingMembers = await app.client.usergroups.users.list({
+    usergroup: GROUP_ID,
+  });
+
+  await app.client.usergroups.users.update({
+    usergroup: GROUP_ID,
+    users: [...(existingMembers.users || []), event.user].join(","),
   });
 
   await app.client.chat.postEphemeral({
