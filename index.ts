@@ -38,7 +38,7 @@ app.event("member_joined_channel", async ({ event, say }) => {
               },
               {
                 type: "emoji",
-                name: "ultrafastparrot",
+                name: "ultrafastcatppuccinparrot",
               },
               {
                 type: "text",
@@ -59,7 +59,7 @@ app.event("member_joined_channel", async ({ event, say }) => {
             type: "button",
             text: {
               type: "plain_text",
-              text: ":ultrafastparrot:",
+              text: ":ultrafastcatppuccinparrot:",
               emoji: true,
             },
             value: "ultrafastparrot",
@@ -164,7 +164,7 @@ app.action("ultrafastparrot", async ({ body, context, ack, respond }) => {
     replace_original: false,
     delete_original: false,
     response_type: "in_channel",
-    text: ":ultrafastparrot:".repeat(20) + `\nSent by <@${context.userId}>`,
+    text: ":conga_parrot:".repeat(20) + `\nSent by <@${context.userId}>`,
     blocks: [
       {
         type: "rich_text",
